@@ -10,7 +10,8 @@ namespace WebAPI.Models
         [Required]
         public string user_name { get; set; }
         [Required]
-        public string password { get; set; }
+        public byte[] password { get; set; }
+        public byte[] password_key { get; set; }
         public string access_token { get; set; }
     }
 }

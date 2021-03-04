@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +13,7 @@ using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
+
 
     public class AccountController : BaseController
     {
@@ -37,7 +39,17 @@ namespace WebAPI.Controllers
 
             return Ok(loginRes);
         }
-
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(LoginReqDto loginReq)
+        {
+            if (await uow.userRepository.UserAlreadyExists(loginReq.UserName))
+            {
+                return BadRequest("User already exist, please try another one");
+            }
+            uow.userRepository.Register(loginReq.UserName, loginReq.Password);
+            await uow.SaveAsync();
+            return StatusCode(201);
+        }
         private string CreateJWT(tbl_user user)
         {
             var secretKey = configuration.GetSection("AppSettings:Key").Value;

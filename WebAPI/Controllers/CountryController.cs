@@ -21,7 +21,7 @@ namespace WebAPI.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("categories")]
         [AllowAnonymous]
         public async Task<IActionResult> GetCategories()
         {
@@ -35,6 +35,7 @@ namespace WebAPI.Controllers
 
         // Post api/category/post --Post the data in JSON format
         [HttpPost("post")]
+        [AllowAnonymous]
         public async Task<IActionResult> AddCategory(CategoryDto categoryDto)
         {
             var category = mapper.Map<tbl_category>(categoryDto);
